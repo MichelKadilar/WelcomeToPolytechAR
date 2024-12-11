@@ -1,10 +1,19 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ARTouch : MonoBehaviour
 {
-    public WebSocketClientScript socketClient;
 
+    public GameObject UITest;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        
+    }
+
+    // Update is called once per frame
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -12,24 +21,24 @@ public class ARTouch : MonoBehaviour
             Debug.Log("Pressed primary button.");
 
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit hit, 100))
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, 100))
             {
-                Debug.Log($"Hit: {hit.transform.name} - Tag: {hit.transform.tag}");
+                Debug.Log("hit");
+                Debug.Log(hit.transform.name + " : " + hit.transform.tag);
 
-                if (hit.transform.CompareTag("ZX81"))
+                if (hit.transform.tag == "ZX81")
                 {
-                    float rotationAmount = 45f; 
-                    Debug.Log($"Tag ZX81 détecté. Envoi de la rotation de {rotationAmount}° au serveur.");
-
-                    if (socketClient != null)
-                    {
-                        socketClient.SendRotationCommand(hit.transform.name, rotationAmount);
-                    }
-                    else
-                    {
-                        Debug.LogError("WebSocketClientScript n'est pas attaché !");
-                    }
+                    Vector3 pos = hit.point;
+                    pos.x += 0.5f;
+                    Instantiate(UITest, pos, transform.rotation);
                 }
+
+                if (hit.transform.tag == "Info")
+                {
+                    Destroy(hit.transform.gameObject);
+                }
+
             }
         }
     }

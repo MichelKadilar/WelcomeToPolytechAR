@@ -133,8 +133,8 @@ GameObject:
   - component: {fileID: 60961935}
   - component: {fileID: 60961934}
   - component: {fileID: 60961933}
-  - component: {fileID: 60961936}
   - component: {fileID: 60961937}
+  - component: {fileID: 60961938}
   m_Layer: 0
   m_Name: XR Origin
   m_TagString: Untagged
@@ -190,21 +190,6 @@ Transform:
   - {fileID: 1041035969}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &60961936
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 60961932}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a05a9746ad2eab1459c20f2237d411ab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ArPrefabs:
-  - {fileID: 3254975050294541858, guid: 06f3d2960dfc8474d89dac1ce826a94e, type: 3}
-  - {fileID: 3254975050294541858, guid: deb80e8b64d656a4c9419b40a7248ffb, type: 3}
 --- !u!114 &60961937
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -217,7 +202,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61a8dce55477e3c4eae72f42219925db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  socketClient: {fileID: 992277744}
+  UITest: {fileID: 3572238020906776897, guid: 05fbe6c1b15fb814d90f7d2756feaa53, type: 3}
+--- !u!114 &60961938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 60961932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d4305742bef726428099d1ce9c53938, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ArPrefabs:
+  - {fileID: 3254975050294541858, guid: 06f3d2960dfc8474d89dac1ce826a94e, type: 3}
+  - {fileID: 3254975050294541858, guid: deb80e8b64d656a4c9419b40a7248ffb, type: 3}
 --- !u!1 &66830514
 GameObject:
   m_ObjectHideFlags: 0

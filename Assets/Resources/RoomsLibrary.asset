@@ -23,17 +23,17 @@ MonoBehaviour:
     m_SerializedTextureGuid:
       m_GuidLow: 11521387599287057648
       m_GuidHigh: 7362971685514457483
-    m_Size: {x: 0.5, y: 0.49330357}
+    m_Size: {x: 1, y: 0.98660713}
     m_SpecifySize: 1
     m_Name: Room260
-    m_Texture: {fileID: 0}
+    m_Texture: {fileID: 2800000, guid: 87187cf030fa9fe48b3159bebc872e66, type: 3}
   - m_SerializedGuid:
       m_GuidLow: 4855181312859326843
       m_GuidHigh: 6207520093998054577
     m_SerializedTextureGuid:
       m_GuidLow: 17799599608683673013
       m_GuidHigh: 15270360361552279467
-    m_Size: {x: 0.5, y: 0.50348836}
+    m_Size: {x: 1, y: 1.0069767}
     m_SpecifySize: 1
     m_Name: Room420
-    m_Texture: {fileID: 0}
+    m_Texture: {fileID: 2800000, guid: abc5b5b5e189f704ab7787ced737ebd3, type: 3}
