@@ -23,7 +23,7 @@ public class ARTouch : MonoBehaviour
 
                 if (hit.transform.tag == "ZX81")
                 {
-                    ShowMessage("Vous avez cliqué sur un objet!");
+                    ShowMessage(hit.transform.name);
                 }
             }
         }
