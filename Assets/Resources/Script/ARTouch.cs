@@ -1,19 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro; 
 
 public class ARTouch : MonoBehaviour
 {
+    public TMP_Text messageText;  
 
-    public GameObject UITest;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -29,17 +23,21 @@ public class ARTouch : MonoBehaviour
 
                 if (hit.transform.tag == "ZX81")
                 {
-                    Vector3 pos = hit.point;
-                    pos.x += 0.5f;
-                    Instantiate(UITest, pos, transform.rotation);
+                    ShowMessage("Vous avez cliqué sur un objet!");
                 }
-
-                if (hit.transform.tag == "Info")
-                {
-                    Destroy(hit.transform.gameObject);
-                }
-
             }
+        }
+    }
+
+    void ShowMessage(string message)
+    {
+        if (messageText != null)
+        {
+            messageText.text = message;
+        }
+        else
+        {
+            Debug.LogWarning("Message Text non attribué dans l'inspecteur.");
         }
     }
 }
