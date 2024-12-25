@@ -748,7 +748,7 @@ GameObject:
   - component: {fileID: 2113376587690806386}
   - component: {fileID: 2085836579508805403}
   m_Layer: 0
-  m_Name: Pool
+  m_Name: SwimmingPool
   m_TagString: ZX81
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -956,7 +956,7 @@ GameObject:
   - component: {fileID: 7159962286301749235}
   - component: {fileID: 4099609034594062135}
   m_Layer: 0
-  m_Name: Rest
+  m_Name: RestRoom
   m_TagString: ZX81
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1247,7 +1247,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1670610499803852, guid: f75a2a99206bc424b8476397d53add0c, type: 3}
       propertyPath: m_Name
-      value: Music
+      value: MusicClass
       objectReference: {fileID: 0}
     - target: {fileID: 1670610499803852, guid: f75a2a99206bc424b8476397d53add0c, type: 3}
       propertyPath: m_TagString
