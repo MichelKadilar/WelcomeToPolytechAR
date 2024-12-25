@@ -154,7 +154,7 @@ GameObject:
   - component: {fileID: 3013927915536838292}
   - component: {fileID: 5166379799163980440}
   m_Layer: 0
-  m_Name: Director
+  m_Name: DirectorOffice
   m_TagString: ZX81
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -469,7 +469,7 @@ GameObject:
   - component: {fileID: 2318919556736280577}
   - component: {fileID: 7220808310329623578}
   m_Layer: 0
-  m_Name: Amphi
+  m_Name: Amphitheater
   m_TagString: ZX81
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
