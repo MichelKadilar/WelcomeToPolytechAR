@@ -6,12 +6,12 @@ using UnityEngine;
 public class Location
 {
     public string name;
-    public string[] neighbours;
+    public string[] neighbors;
 
-    public Location(string name, string[] neighbours)
+    public Location(string name, string[] neighbors)
     {
         this.name = name;
-        this.neighbours = neighbours;
+        this.neighbors = neighbors;
     }
 
 }
