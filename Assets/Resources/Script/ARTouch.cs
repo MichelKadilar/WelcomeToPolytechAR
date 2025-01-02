@@ -14,7 +14,6 @@ public class ARTouch : MonoBehaviour
 
 
     private string currentRoom;
-    private Dictionary<string, List<string>> roomNeighbors = new Dictionary<string, List<string>>();
 
     void Start()
     {
@@ -22,8 +21,6 @@ public class ARTouch : MonoBehaviour
         {
             canvas.SetActive(false);
         }
-
-        InitializeRoomNeighbors();
 
         if (calculateButton != null)
         {
@@ -114,7 +111,7 @@ public class ARTouch : MonoBehaviour
         if (dropdown != null)
         {
             dropdown.ClearOptions();
-            dropdown.AddOptions(new List<string>(roomNeighbors.Keys));
+            dropdown.AddOptions(CSVDataReader.Instance.GetLocationNames());
         }
     }
 
@@ -138,7 +135,7 @@ public class ARTouch : MonoBehaviour
 
     int GetTravelTime(string start, string end)
     {
-        if (!roomNeighbors.ContainsKey(start) || !roomNeighbors.ContainsKey(end))
+        if (!CSVDataReader.Instance.IsExistingLocation(start) || !CSVDataReader.Instance.IsExistingLocation(end))
         {
             return -1;      
         }
@@ -158,7 +155,7 @@ public class ARTouch : MonoBehaviour
                 return currentTime;
             }
 
-            foreach (string neighbor in roomNeighbors[currentRoom])
+            foreach (string neighbor in CSVDataReader.Instance.GetLocation(currentRoom).neighbors)
             {
                 if (!visited.Contains(neighbor))
                 {
@@ -193,33 +190,6 @@ public class ARTouch : MonoBehaviour
         {
             Debug.LogWarning("Message Text non attribué dans l'inspecteur.");
         }
-    }
-
-    void InitializeRoomNeighbors()
-    {
-        roomNeighbors["Amphitheater"] = new List<string> { "Room42", "DirectorOffice" };
-        roomNeighbors["Cafeteria"] = new List<string> { "Room07", "ImmersiveRoom", "DirectorOffice" };
-        roomNeighbors["DirectorOffice"] = new List<string> { "Amphitheater", "Cafeteria" };
-        roomNeighbors["Garden"] = new List<string> { "SwimmingPool", "Room01" };
-        roomNeighbors["Gym"] = new List<string> { "RestRoom", "Room260", "MusicClass" };
-        roomNeighbors["ImmersiveRoom"] = new List<string> { "Room507", "Room682", "Room02", "Room03", "Room07", "Cafeteria" };
-        roomNeighbors["Infirmery"] = new List<string> { "RestRoom", "Library" };
-        roomNeighbors["Library"] = new List<string> { "Infirmery", "RestRoom", "Room260", "Room420" };
-        roomNeighbors["MusicClass"] = new List<string> { "Gym", "Room260", "Playground" };
-        roomNeighbors["Playground"] = new List<string> { "MusicClass", "SwimmingPool" };
-        roomNeighbors["Secretariat"] = new List<string> { "Room25" };
-        roomNeighbors["SwimmingPool"] = new List<string> { "Playground", "Garden" };
-        roomNeighbors["RestRoom"] = new List<string> { "Infirmery", "Library", "Gym", "Room260" };
-        roomNeighbors["Room01"] = new List<string> { "Garden", "Room02", "Room03" };
-        roomNeighbors["Room02"] = new List<string> { "Room01", "ImmersiveRoom" };
-        roomNeighbors["Room03"] = new List<string> { "Room01", "ImmersiveRoom", "Room07" };
-        roomNeighbors["Room07"] = new List<string> { "Room03", "ImmersiveRoom", "Cafeteria" };
-        roomNeighbors["Room25"] = new List<string> { "Secretariat", "Room42" };
-        roomNeighbors["Room260"] = new List<string> { "MusicClass", "Gym", "RestRoom", "Library", "Room420" };
-        roomNeighbors["Room42"] = new List<string> { "Room25", "Amphitheater" };
-        roomNeighbors["Room420"] = new List<string> { "Room260", "Library", "Room507" };
-        roomNeighbors["Room507"] = new List<string> { "Room420", "Room682", "ImmersiveRoom" };
-        roomNeighbors["Room682"] = new List<string> { "Room507", "ImmersiveRoom" };
     }
 
     void CloseCanvas()

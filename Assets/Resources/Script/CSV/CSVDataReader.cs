@@ -74,14 +74,35 @@ public class CSVDataReader : MonoBehaviour
         for (int i = 1; i < csvLocations.Length; i++)
         {
             string[] tmp = csvLocations[i].Split(',');
-            string[] csvNeighbours = tmp[1].Split('[')[1].Split(']')[0].Split(';');
-            locations.Add(new Location(tmp[0], csvNeighbours));
+            string[] csvNeighbors = tmp[1].Split('[')[1].Split(']')[0].Split(';');
+            locations.Add(new Location(tmp[0], csvNeighbors));
         }
     }
 
     public List<Location> GetLocations()
     {
         return locations;
+    }
+
+    public List<string> GetLocationNames()
+    {
+        List<string> names = new List<string>();
+        foreach(Location location in locations) {
+            names.Add(location.name);
+        }
+        return names;
+    }
+
+    public Location GetLocation(string locationName) {
+        foreach(Location location in locations) {
+            if(locationName == location.name) return location;
+        }
+        return null;
+    }
+
+    public Boolean IsExistingLocation(string locationName)
+    {
+        return GetLocation(locationName) != null;
     }
 
     public List<string> GetTransports()

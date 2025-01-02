@@ -578,7 +578,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 100000, guid: 23a7b349bdb6ad640baa437d9a28a0c9, type: 3}
       propertyPath: m_Name
-      value: VR
+      value: ImmersiveRoom
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 23a7b349bdb6ad640baa437d9a28a0c9, type: 3}
       propertyPath: m_TagString

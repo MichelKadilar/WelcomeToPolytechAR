@@ -1,4 +1,4 @@
-roomName,neighbours
+roomName,neighbors
 Amphitheater,[Room42;DirectorOffice]
 Cafeteria,[Room07;ImmersiveRoom;DirectorOffice]
 DirectorOffice,[Amphitheater;Cafeteria]
