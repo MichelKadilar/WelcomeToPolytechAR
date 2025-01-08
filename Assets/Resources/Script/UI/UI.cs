@@ -22,6 +22,8 @@ public class UI : MonoBehaviour
     }
 
     public GameObject panel; // Assign the Panel in the Inspector
+    public GameObject panelSearch; // Assign the Panel in the Inspector
+    public GameObject panelAnalyze; // Assign the Panel in the Inspector
 
     // Start is called before the first frame update
     void Start()
@@ -35,8 +37,25 @@ public class UI : MonoBehaviour
         
     }
 
+    public void scanButtonPressed()
+    {
+        panel.SetActive(false);
+        panelSearch.SetActive(false);
+        panelAnalyze.SetActive(false);
+    }
+
     public void searchButtonPressed()
     {
-       panel.SetActive(false);
+        panel.SetActive(false);
+        panelSearch.SetActive(true);
+        panelAnalyze.SetActive(false);
+    }
+
+
+    public void analyzeButtonPressed()
+    {
+        panel.SetActive(false);
+        panelSearch.SetActive(false);
+        panelAnalyze.SetActive(true);
     }
 }
