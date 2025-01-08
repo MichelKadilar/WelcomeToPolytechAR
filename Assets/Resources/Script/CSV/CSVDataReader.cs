@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -131,16 +132,38 @@ public class CSVDataReader : MonoBehaviour
     }
 
     public List<Student> GetStudents(string location, int startTime, int endTime) {
-        List<Student> students = new List<Student>();
+        List<Student> studentsResult = new List<Student>();
         foreach(Student student in students) {
             for(int i = 0; i < 5; i++) {
                 if(startTime <= 13+i && endTime >= 13+i && location == student.locations[i]) {
-                    students.Add(student);
+                    studentsResult.Add(student);
                     break;
                 }
             }
         }
-        return students;
+        return studentsResult;
+    }
+
+    public List<Student> GetStudents(int year, string specialization, string location, string objectName, string transport) {
+        List<Student> studentsResult = new List<Student>();
+        foreach(Student student in students) {
+            if(year < 0 && student.year != year) continue;
+            if(specialization != null && student.specialization != specialization) continue;
+            if(transport != null && student.transport != transport) continue;
+            if(location != null && !student.locations.Contains(location)) continue;
+            if(objectName != null) {
+                bool matchObject = false;
+                foreach(ObjectOfInterest objectOfInterest in objects) {
+                    if(objectOfInterest.name == objectName && student.locations.Contains(objectOfInterest.sourceLoc)) {
+                        matchObject = true;
+                        break;
+                    }
+                }
+                if(!matchObject) continue;
+            }
+            studentsResult.Add(student);
+        }
+        return studentsResult;
     }
 
     public List<ObjectOfInterest> GetObjects(string location, int startTime, int endTime) {
