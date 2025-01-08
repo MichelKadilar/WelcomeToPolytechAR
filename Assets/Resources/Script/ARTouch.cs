@@ -75,22 +75,7 @@ public class ARTouch : MonoBehaviour
                 message += "Aucun objet lié trouvé.\n";
             }
 
-            List<Student> students = CSVDataReader.Instance.GetStudents();
-            bool studentFound = false;
-            message += $"\nÉtudiants : ";
-            foreach (Student student in students)
-            {
-                if (IsStudentInRoom(student, objectName))
-                {
-                    studentFound = true;
-                    message += $"{student.name}, ";
-                }
-            }
-
-            if (!studentFound)
-            {
-                message += "\nAucun étudiant trouvé dans cette salle.\n";
-            }
+            message += Utils.NiceStudentsDisplay(CSVDataReader.Instance.GetStudents(), objectName);
 
             DisplayMessage(message);
 
@@ -166,18 +151,6 @@ public class ARTouch : MonoBehaviour
         }
 
         return -1; 
-    }
-
-    bool IsStudentInRoom(Student student, string roomName)
-    {
-        foreach (string location in student.locations)
-        {
-            if (location == roomName)
-            {
-                return true;
-            }
-        }
-        return false;
     }
 
     void DisplayMessage(string message)
