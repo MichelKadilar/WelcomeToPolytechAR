@@ -4,44 +4,55 @@ using UnityEngine;
 
 public class UI : MonoBehaviour
 {
+    private Camera mainCamera;
 
-    public AudioSource audioSource;
-    public AudioClip soundClip;
+    public GameObject panel; // Assignation des 3 panels dans l'inspecteur Unity
+    public GameObject panelSearch;
+    public GameObject panelAnalyze;
 
-    // Play the sound when this method is called
-    public void PlaySound()
-    {
-        // If soundClip is set, assign it to the AudioSource
-        if (soundClip != null)
-        {
-            audioSource.clip = soundClip;
-        }
+    private MonoBehaviour ARCameraManagerScriptComponent;
+    private MonoBehaviour ARCameraBackgroundScriptComponent;
+    private UnityEngine.InputSystem.XR.TrackedPoseDriver trackedPoseDriverComponent;
 
-        // Play the sound
-        audioSource.Play();
-    }
-
-    public GameObject panel; // Assign the Panel in the Inspector
-    public GameObject panelSearch; // Assign the Panel in the Inspector
-    public GameObject panelAnalyze; // Assign the Panel in the Inspector
-
-    // Start is called before the first frame update
     void Start()
     {
-        
+        mainCamera = Camera.main;
+        if (mainCamera != null)
+        {
+            var cameraManager = mainCamera.GetComponent("ARCameraManager");
+            if (cameraManager != null)
+            {
+                ARCameraManagerScriptComponent = (MonoBehaviour) cameraManager;
+                ARCameraManagerScriptComponent.enabled = false;
+            }
+
+            var cameraBackground = mainCamera.GetComponent("ARCameraBackground");
+            if (cameraBackground != null)
+            {
+                ARCameraBackgroundScriptComponent = (MonoBehaviour) cameraBackground;
+                ARCameraBackgroundScriptComponent.enabled = false;
+            }
+
+            var trackedPoseDriver = mainCamera.GetComponent<UnityEngine.InputSystem.XR.TrackedPoseDriver>();
+            if (trackedPoseDriver != null)
+            {
+                trackedPoseDriverComponent = trackedPoseDriver;
+                trackedPoseDriverComponent.enabled = false;
+            }
+        }
+        else
+        {
+            Debug.LogError("Pas de main camera dans la scène");
+        }
+
+        panel.SetActive(true);
+        panelSearch.SetActive(false);
+        panelAnalyze.SetActive(false);
     }
 
-    // Update is called once per frame
     void Update()
     {
         
-    }
-
-    public void scanButtonPressed()
-    {
-        panel.SetActive(false);
-        panelSearch.SetActive(false);
-        panelAnalyze.SetActive(false);
     }
 
     public void searchButtonPressed()
@@ -51,6 +62,15 @@ public class UI : MonoBehaviour
         panelAnalyze.SetActive(false);
     }
 
+    public void scanButtonPressed()
+    {
+        panel.SetActive(false);
+        panelSearch.SetActive(false);
+        panelAnalyze.SetActive(false);
+        ARCameraManagerScriptComponent.enabled = true;
+        ARCameraBackgroundScriptComponent.enabled = true;
+        trackedPoseDriverComponent.enabled = false;
+    }
 
     public void analyzeButtonPressed()
     {
