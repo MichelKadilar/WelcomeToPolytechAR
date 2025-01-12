@@ -728,6 +728,7 @@ GameObject:
   - component: {fileID: 146160280}
   - component: {fileID: 146160279}
   - component: {fileID: 146160281}
+  - component: {fileID: 146160282}
   m_Layer: 0
   m_Name: MenuController
   m_TagString: Untagged
@@ -781,6 +782,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioSource: {fileID: 1581059543}
   soundClip: {fileID: 8300000, guid: 2b8fa18ef26b91e4e8488fd025207606, type: 3}
+--- !u!114 &146160282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 146160278}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cfcfefed99073b4ba957ec825f5323e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &173609726
 GameObject:
   m_ObjectHideFlags: 0
@@ -1036,6 +1049,18 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 146160282}
+        m_TargetAssemblyTypeName: LoggingService, Assembly-CSharp
+        m_MethodName: LogInfo
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: '"Clic sur Rechercher"'
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &184220795
@@ -4183,6 +4208,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   contentArea: {fileID: 1235751576}
   namePrefab: {fileID: 933621249}
+  loggingServiceScript: {fileID: 146160282}
+  infoColor: {r: 1, g: 1, b: 1, a: 1}
+  warningColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  errorColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &1285055896
 MonoBehaviour:
   m_ObjectHideFlags: 0
