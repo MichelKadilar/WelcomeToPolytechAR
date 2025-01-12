@@ -21,7 +21,7 @@ public class LoggingService : MonoBehaviour
         }
     }
 
-    // Cache circulaire pour stocker les logs
+    // Cache circulaire pour stocker au maximum MAX_CACHE_SIZE logs
     private readonly Queue<LogEntry> logCache = new Queue<LogEntry>();
     private const int MAX_CACHE_SIZE = 100; // Nombre maximum de logs conservés
 
@@ -38,7 +38,6 @@ public class LoggingService : MonoBehaviour
         instance = this;
     }
 
-    // Méthodes pour ajouter des logs de différents types
     public void LogInfo(string message)
     {
         AddLog(message, LogType.Log);
@@ -69,7 +68,6 @@ public class LoggingService : MonoBehaviour
         OnNewLog?.Invoke(logEntry);
     }
 
-    // Méthode pour récupérer tous les logs
     public IEnumerable<LogEntry> GetAllLogs()
     {
         return logCache.ToList();
