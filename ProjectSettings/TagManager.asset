@@ -6,6 +6,7 @@ TagManager:
   tags:
   - ZX81
   - Info
+  - MenuCamera
   layers:
   - Default
   - TransparentFX

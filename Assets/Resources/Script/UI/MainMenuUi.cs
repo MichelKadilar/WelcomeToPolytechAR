@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using Unity.XR.CoreUtils;
 
 public class MainMenuUI : MonoBehaviour
 {
 
     public SoundPlayer soundPlayerForHover;
 
-    private Camera mainCamera;
+    public XROrigin xrOrigin;
+    public Camera menuCamera;
+    public GameObject cameraOffset;
 
     public GameObject panel; // Assignation des 3 panels dans l'inspecteur Unity
     public GameObject panelSearch;
@@ -25,35 +28,40 @@ public class MainMenuUI : MonoBehaviour
 
     void Start()
     {
-        mainCamera = Camera.main;
-        if (mainCamera != null)
+        if (xrOrigin != null)
         {
-            var cameraManager = mainCamera.GetComponent("ARCameraManager");
-            if (cameraManager != null)
-            {
-                ARCameraManagerScriptComponent = (MonoBehaviour) cameraManager;
-                ARCameraManagerScriptComponent.enabled = false;
-            }
+            Debug.Log("XROrigin trouvé : " + xrOrigin.name);
 
-            var cameraBackground = mainCamera.GetComponent("ARCameraBackground");
-            if (cameraBackground != null)
-            {
-                ARCameraBackgroundScriptComponent = (MonoBehaviour) cameraBackground;
-                ARCameraBackgroundScriptComponent.enabled = false;
-            }
+            Component[] components = xrOrigin.GetComponents<Component>();
 
-            var trackedPoseDriver = mainCamera.GetComponent<UnityEngine.InputSystem.XR.TrackedPoseDriver>();
-            if (trackedPoseDriver != null)
+            foreach (Component component in components)
             {
-                trackedPoseDriverComponent = trackedPoseDriver;
-                trackedPoseDriverComponent.enabled = false;
+                if (component is MonoBehaviour script)
+                {
+                    script.enabled = false;
+                    Debug.Log("Script désactivé : " + script.GetType().Name);
+                }
+                else
+                {
+                    Debug.Log("Composant non script trouvé : " + component.GetType().Name);
+                }
             }
         }
         else
         {
-            Debug.LogError("Pas de main camera dans la scène");
+            Debug.LogWarning("Aucun XROrigin trouvé dans la scène !");
         }
 
+        if (menuCamera != null)
+        {
+            menuCamera.enabled = true;
+        }
+        else
+        {
+            Debug.LogError("Pas de menu camera dans la scène");
+        }
+        
+        cameraOffset.SetActive(false);
         panel.SetActive(true);
         panelSearch.SetActive(false);
         panelAnalyze.SetActive(false);
@@ -101,6 +109,8 @@ public class MainMenuUI : MonoBehaviour
         panel.SetActive(false);
         panelSearch.SetActive(true);
         panelAnalyze.SetActive(false);
+        menuCamera.enabled = true;
+        cameraOffset.SetActive(false);
         AnimateButton(0);
     }
 
@@ -109,9 +119,8 @@ public class MainMenuUI : MonoBehaviour
         panel.SetActive(false);
         panelSearch.SetActive(false);
         panelAnalyze.SetActive(false);
-        ARCameraManagerScriptComponent.enabled = true;
-        ARCameraBackgroundScriptComponent.enabled = true;
-        trackedPoseDriverComponent.enabled = true;
+        menuCamera.enabled = false;
+        cameraOffset.SetActive(true);
         AnimateButton(1);
     }
 
@@ -120,6 +129,8 @@ public class MainMenuUI : MonoBehaviour
         panel.SetActive(false);
         panelSearch.SetActive(false);
         panelAnalyze.SetActive(true);
+        menuCamera.enabled = true;
+        cameraOffset.SetActive(false);
         AnimateButton(2);
     }
 
@@ -131,7 +142,6 @@ public class MainMenuUI : MonoBehaviour
         backgroundImage.color = hoverColor;
     }
 
-    // Reset color when pointer exits the button
     private void OnPointerExit(Button button)
     {
         var backgroundImage = button.GetComponent<Image>();
@@ -142,7 +152,7 @@ public class MainMenuUI : MonoBehaviour
     {
         for (int i = 0; i < buttons.Length; i++)
         {
-            // Reset all button backgrounds to default (white in this example)
+            // Reset all button backgrounds to default
             var backgroundImage = buttons[i].GetComponent<Image>();
             backgroundImage.color = Color.white;
         }

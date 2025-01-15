@@ -1389,6 +1389,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundPlayerForHover: {fileID: 146160281}
+  xrOrigin: {fileID: 60961934}
+  menuCamera: {fileID: 2129181613}
+  cameraOffset: {fileID: 1041035968}
   panel: {fileID: 17185049}
   panelSearch: {fileID: 1901011397}
   panelAnalyze: {fileID: 1285055891}
@@ -4162,8 +4165,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1581059539}
+  m_Children: []
   m_Father: {fileID: 1041035969}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &451018578
@@ -11970,7 +11972,7 @@ RectTransform:
   - {fileID: 1901011398}
   - {fileID: 1285055894}
   - {fileID: 1685586851}
-  m_Father: {fileID: 451018577}
+  m_Father: {fileID: 2129181614}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -14256,3 +14258,4 @@ SceneRoots:
   - {fileID: 23345397}
   - {fileID: 146160280}
   - {fileID: 1249807935}
+  - {fileID: 2129181614}
