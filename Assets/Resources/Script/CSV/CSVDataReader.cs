@@ -20,6 +20,7 @@ public class CSVDataReader : MonoBehaviour
     List<string> transports = new List<string>();
     List<string> clothings = new List<string>();
     List<string> specializations = new List<string>();
+    List<int> years = new List<int>();
 
     public void Awake()
     {
@@ -56,7 +57,12 @@ public class CSVDataReader : MonoBehaviour
             if(!clothings.Contains(clothing)) clothings.Add(clothing);
             string specialization = tmp[12];
             if(!specializations.Contains(specialization)) specializations.Add(specialization);
+            int year = int.Parse(tmp[11]);
+            if(!years.Contains(year)) years.Add(year);
         }
+        years.Sort();
+        specializations.Sort();
+        transports.Sort();
     }
 
     private void LoadObjects() {
@@ -91,6 +97,7 @@ public class CSVDataReader : MonoBehaviour
         foreach(Location location in locations) {
             names.Add(location.name);
         }
+        names.Sort();
         return names;
     }
 
@@ -104,6 +111,15 @@ public class CSVDataReader : MonoBehaviour
     public Boolean IsExistingLocation(string locationName)
     {
         return GetLocation(locationName) != null;
+    }
+
+    public List<string> GetYears()
+    {
+        List<string> names = new List<string>();
+        foreach(int year in years) {
+            names.Add(year.ToString());
+        }
+        return names;
     }
 
     public List<string> GetTransports()
@@ -131,6 +147,16 @@ public class CSVDataReader : MonoBehaviour
         return objects;
     }
 
+    public List<string> GetObjectNames()
+    {
+        List<string> names = new List<string>();
+        foreach(ObjectOfInterest objectOfInterest in objects) {
+            names.Add(objectOfInterest.name);
+        }
+        names.Sort();
+        return names;
+    }
+
     public List<Student> GetStudents(string location, int startTime, int endTime) {
         List<Student> studentsResult = new List<Student>();
         foreach(Student student in students) {
@@ -145,13 +171,21 @@ public class CSVDataReader : MonoBehaviour
     }
 
     public List<Student> GetStudents(int year, string specialization, string location, string objectName, string transport) {
+        bool yearParamSetted = year > 0;
+        bool specializationParamSetted = specialization != null && specialization.Count() > 0;
+        bool locationParamSetted = location != null && location.Count() > 0;
+        bool objectNameParamSetted = objectName != null && objectName.Count() > 0;
+        bool transportParamSetted = transport != null && transport.Count() > 0;
+
+        //if(!(yearParamSetted && specializationParamSetted && locationParamSetted && objectNameParamSetted && transportParamSetted)) return students;
+
         List<Student> studentsResult = new List<Student>();
         foreach(Student student in students) {
-            if(year < 0 && student.year != year) continue;
-            if(specialization != null && student.specialization != specialization) continue;
-            if(transport != null && student.transport != transport) continue;
-            if(location != null && !student.locations.Contains(location)) continue;
-            if(objectName != null) {
+            if(yearParamSetted && student.year != year) continue;
+            if(specializationParamSetted && student.specialization != specialization) continue;
+            if(transportParamSetted && student.transport != transport) continue;
+            if(locationParamSetted && !student.locations.Contains(location)) continue;
+            if(objectNameParamSetted) {
                 bool matchObject = false;
                 foreach(ObjectOfInterest objectOfInterest in objects) {
                     if(objectOfInterest.name == objectName && student.locations.Contains(objectOfInterest.sourceLoc)) {
