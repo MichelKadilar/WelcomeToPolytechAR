@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.XR.CoreUtils;
 
 public class BackButton : MonoBehaviour
 {
+    public XROrigin xrOrigin;
     public GameObject backButton;
     public GameObject mainMenuPanel;
     public GameObject panelSearch;
@@ -26,6 +28,31 @@ public class BackButton : MonoBehaviour
     private bool IsActive(GameObject targetObject)
     {
         return targetObject != null && targetObject.activeSelf;
+    }
+
+    private void DisableXRComponents()
+    {
+        if (xrOrigin != null)
+        {
+            Debug.Log("XROrigin trouvé : " + xrOrigin.name);
+            Component[] components = xrOrigin.GetComponents<Component>();
+            foreach (Component component in components)
+            {
+                if (component is MonoBehaviour script)
+                {
+                    script.enabled = false;
+                    Debug.Log("Script désactivé : " + script.GetType().Name);
+                }
+                else
+                {
+                    Debug.Log("Composant non script trouvé : " + component.GetType().Name);
+                }
+            }
+        }
+        else
+        {
+            Debug.LogWarning("Aucun XROrigin trouvé dans la scène !");
+        }
     }
 
     private void backButtonActivation()
@@ -55,6 +82,7 @@ public class BackButton : MonoBehaviour
             panelSearch1.SetActive(false);
             panelSearch2.SetActive(false);
             panelAnalyze.SetActive(false);
+            DisableXRComponents();
         }
         else if (IsActive(panelSearch2))
         {
@@ -63,6 +91,7 @@ public class BackButton : MonoBehaviour
             panelSearch1.SetActive(true);
             panelSearch2.SetActive(false);
             panelAnalyze.SetActive(false);
+            DisableXRComponents();
         }
         else if (IsActive(panelAnalyze))
         {
@@ -71,6 +100,7 @@ public class BackButton : MonoBehaviour
             panelSearch1.SetActive(false);
             panelSearch2.SetActive(false);
             panelAnalyze.SetActive(false);
+            DisableXRComponents();
         }
         else
         {
@@ -79,6 +109,7 @@ public class BackButton : MonoBehaviour
             panelSearch1.SetActive(false);
             panelSearch2.SetActive(false);
             panelAnalyze.SetActive(false);
+            DisableXRComponents();
         }
     }
 

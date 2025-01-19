@@ -18,40 +18,14 @@ public class MainMenuUI : MonoBehaviour
     public GameObject panelSearch2;
     public GameObject panelAnalyze;
 
-    private MonoBehaviour ARCameraManagerScriptComponent;
-    private MonoBehaviour ARCameraBackgroundScriptComponent;
-    private UnityEngine.InputSystem.XR.TrackedPoseDriver trackedPoseDriverComponent;
-
     private Button[] buttons;
     private Color originalColor;
     public Color hoverColor = Color.gray;
-    public float animationDuration = 0.5f; // Durée de l'animation en secondes
+    public float animationDuration = 0.5f;
 
     void Start()
     {
-        if (xrOrigin != null)
-        {
-            Debug.Log("XROrigin trouvé : " + xrOrigin.name);
-
-            Component[] components = xrOrigin.GetComponents<Component>();
-
-            foreach (Component component in components)
-            {
-                if (component is MonoBehaviour script)
-                {
-                    script.enabled = false;
-                    Debug.Log("Script désactivé : " + script.GetType().Name);
-                }
-                else
-                {
-                    Debug.Log("Composant non script trouvé : " + component.GetType().Name);
-                }
-            }
-        }
-        else
-        {
-            Debug.LogWarning("Aucun XROrigin trouvé dans la scène !");
-        }
+        DisableXRComponents();
 
         if (menuCamera != null)
         {
@@ -69,6 +43,36 @@ public class MainMenuUI : MonoBehaviour
         panelSearch2.SetActive(false);
         panelAnalyze.SetActive(false);
 
+        SetupButtons();
+    }
+
+    private void DisableXRComponents()
+    {
+        if (xrOrigin != null)
+        {
+            Debug.Log("XROrigin trouvé : " + xrOrigin.name);
+            Component[] components = xrOrigin.GetComponents<Component>();
+            foreach (Component component in components)
+            {
+                if (component is MonoBehaviour script)
+                {
+                    script.enabled = false;
+                    Debug.Log("Script désactivé : " + script.GetType().Name);
+                }
+                else
+                {
+                    Debug.Log("Composant non script trouvé : " + component.GetType().Name);
+                }
+            }
+        }
+        else
+        {
+            Debug.LogWarning("Aucun XROrigin trouvé dans la scène !");
+        }
+    }
+
+    private void SetupButtons()
+    {
         buttons = panel.GetComponentsInChildren<Button>();
 
         if (buttons == null || buttons.Length == 0)
@@ -97,9 +101,16 @@ public class MainMenuUI : MonoBehaviour
         }
     }
 
-    void Update()
+    public void ReturnToMenu()
     {
-
+        DisableXRComponents();
+        panel.SetActive(true);
+        panelSearch.SetActive(false);
+        panelSearch1.SetActive(false);
+        panelSearch2.SetActive(false);
+        panelAnalyze.SetActive(false);
+        menuCamera.enabled = true;
+        cameraOffset.SetActive(false);
     }
 
     public void searchButtonPressed()
@@ -150,21 +161,17 @@ public class MainMenuUI : MonoBehaviour
 
     private IEnumerator AnimateButtonCoroutine(int buttonIndex)
     {
-        // Réinitialiser tous les boutons à blanc
         for (int i = 0; i < buttons.Length; i++)
         {
             var backgroundImage = buttons[i].GetComponent<Image>();
             backgroundImage.color = Color.white;
         }
 
-        // Changer la couleur du bouton cliqué en gris
         var clickedButtonBackground = buttons[buttonIndex].GetComponent<Image>();
         clickedButtonBackground.color = Color.grey;
 
-        // Attendre la durée de l'animation
         yield return new WaitForSeconds(animationDuration);
 
-        // Remettre le bouton en blanc
         clickedButtonBackground.color = Color.white;
     }
 }

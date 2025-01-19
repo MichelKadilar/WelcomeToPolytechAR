@@ -6768,7 +6768,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4281479730
   m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -6781,7 +6781,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -8154,6 +8154,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9edcbdadf5886549b7aacc323b28b1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  xrOrigin: {fileID: 60961934}
   backButton: {fileID: 1685586850}
   mainMenuPanel: {fileID: 17185049}
   panelSearch: {fileID: 217215286}
@@ -8834,7 +8835,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 518183317}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.2
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
