@@ -110,10 +110,12 @@ public class ARTouch : MonoBehaviour
             if (travelTime >= 0)
             {
                 DisplayMessage($"Temps de trajet entre {currentRoom} et {destination} : {travelTime} minutes.");
+                LoggingService.Instance.LogInfo($"(Trajet) Calcul du temps de trajet entre {currentRoom} et {destination} : {travelTime} minutes.");
             }
             else
             {
                 DisplayMessage($"Aucun chemin trouvé entre {currentRoom} et {destination}.");
+                LoggingService.Instance.LogInfo($"(Trajet) Recherche de trajet. Aucun chemin trouvé.");
             }
         }
     }
