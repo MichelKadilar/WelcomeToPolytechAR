@@ -7,6 +7,8 @@ public class BackButton : MonoBehaviour
     public GameObject backButton;
     public GameObject mainMenuPanel;
     public GameObject panelSearch;
+    public GameObject panelSearch1;
+    public GameObject panelSearch2;
     public GameObject panelAnalyze;
 
     // Start is called before the first frame update
@@ -47,21 +49,35 @@ public class BackButton : MonoBehaviour
 
     public void goBack()
     {
-        if (IsActive(panelSearch)){
+        if (IsActive(panelSearch1)){
             mainMenuPanel.SetActive(true);
             panelSearch.SetActive(false);
+            panelSearch1.SetActive(false);
+            panelSearch2.SetActive(false);
+            panelAnalyze.SetActive(false);
+        }
+        else if (IsActive(panelSearch2))
+        {
+            mainMenuPanel.SetActive(false);
+            panelSearch.SetActive(true);
+            panelSearch1.SetActive(true);
+            panelSearch2.SetActive(false);
             panelAnalyze.SetActive(false);
         }
         else if (IsActive(panelAnalyze))
         {
             mainMenuPanel.SetActive(true);
             panelSearch.SetActive(false);
+            panelSearch1.SetActive(false);
+            panelSearch2.SetActive(false);
             panelAnalyze.SetActive(false);
         }
         else
         {
             mainMenuPanel.SetActive(true);
             panelSearch.SetActive(false);
+            panelSearch1.SetActive(false);
+            panelSearch2.SetActive(false);
             panelAnalyze.SetActive(false);
         }
     }

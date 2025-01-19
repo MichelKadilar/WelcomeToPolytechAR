@@ -19,10 +19,11 @@ public class SearchForm : MonoBehaviour
     public TMP_Dropdown transportDropdown;
     public Button submitButton;
     public Button resetButton;
-    public Button returnButton;
     public GameObject scrollView;
     public GameObject contentArea;
     public GameObject namePrefab;
+    public GameObject panelSearch1;
+    public GameObject panelSearch2;
 
     private bool init = false;
     private List<string> years = new List<string>(){""};
@@ -64,9 +65,6 @@ public class SearchForm : MonoBehaviour
         locationDropdown.onValueChanged.AddListener(OnLocationChanged);
         objectDropdown.onValueChanged.AddListener(OnObjectChanged);
         transportDropdown.onValueChanged.AddListener(OnTransportChanged);
-
-        returnButton.gameObject.SetActive(false);
-        scrollView.gameObject.SetActive(false);
     }
 
     void Update()
@@ -126,7 +124,8 @@ public class SearchForm : MonoBehaviour
     }
 
     public void SubmitForm() {
-        SetFormMode(false);
+        panelSearch1.SetActive(false);
+        panelSearch2.SetActive(true);
         int year = years[yearDropdown.value].Count() == 0 ? -1 : int.Parse(years[yearDropdown.value]);
         string specialization = specializations[specializationDropdown.value];
         string location = locations[locationDropdown.value];
@@ -140,36 +139,6 @@ public class SearchForm : MonoBehaviour
                 CreateEntry(student.name);
             }
         }
-    }
-
-    public void ReturnToForm() {
-        Transform firstChild = contentArea.transform.GetChild(0);
-        foreach(Transform child in contentArea.transform) {
-            if (child != firstChild) {
-                Destroy(child.gameObject);
-            }
-        }
-        LayoutRebuilder.ForceRebuildLayoutImmediate(contentArea.GetComponent<RectTransform>());
-        SetFormMode(true);
-        ClearForm();
-    }
-
-    private void SetFormMode(bool active) {
-        yearLabel.gameObject.SetActive(active);
-        specializationLabel.gameObject.SetActive(active);
-        locationLabel.gameObject.SetActive(active);
-        objectLabel.gameObject.SetActive(active);
-        transportLabel.gameObject.SetActive(active);
-        yearDropdown.gameObject.SetActive(active);
-        specializationDropdown.gameObject.SetActive(active);
-        locationDropdown.gameObject.SetActive(active);
-        objectDropdown.gameObject.SetActive(active);
-        transportDropdown.gameObject.SetActive(active);
-        submitButton.gameObject.SetActive(active);
-        resetButton.gameObject.SetActive(active);
-        
-        returnButton.gameObject.SetActive(!active);
-        scrollView.gameObject.SetActive(!active);
     }
 
     private void CreateEntry(string entryText)

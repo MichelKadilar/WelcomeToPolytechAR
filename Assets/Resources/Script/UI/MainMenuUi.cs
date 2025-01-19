@@ -7,15 +7,15 @@ using Unity.XR.CoreUtils;
 
 public class MainMenuUI : MonoBehaviour
 {
-
     public SoundPlayer soundPlayerForHover;
-
     public XROrigin xrOrigin;
     public Camera menuCamera;
     public GameObject cameraOffset;
 
-    public GameObject panel; // Assignation des 3 panels dans l'inspecteur Unity
+    public GameObject panel;
     public GameObject panelSearch;
+    public GameObject panelSearch1;
+    public GameObject panelSearch2;
     public GameObject panelAnalyze;
 
     private MonoBehaviour ARCameraManagerScriptComponent;
@@ -25,6 +25,7 @@ public class MainMenuUI : MonoBehaviour
     private Button[] buttons;
     private Color originalColor;
     public Color hoverColor = Color.gray;
+    public float animationDuration = 0.5f; // Durée de l'animation en secondes
 
     void Start()
     {
@@ -60,14 +61,15 @@ public class MainMenuUI : MonoBehaviour
         {
             Debug.LogError("Pas de menu camera dans la scène");
         }
-        
+
         cameraOffset.SetActive(false);
         panel.SetActive(true);
         panelSearch.SetActive(false);
+        panelSearch1.SetActive(false);
+        panelSearch2.SetActive(false);
         panelAnalyze.SetActive(false);
 
         buttons = panel.GetComponentsInChildren<Button>();
-
 
         if (buttons == null || buttons.Length == 0)
         {
@@ -77,21 +79,17 @@ public class MainMenuUI : MonoBehaviour
 
         Debug.Log("Buttons count: " + buttons.Length);
 
-        // Add listeners to buttons
         for (int i = 0; i < buttons.Length; i++)
         {
-            int index = i; // Capture index in local scope
+            int index = i;
 
-            // Attach hover event listeners
             EventTrigger trigger = buttons[i].gameObject.AddComponent<EventTrigger>();
 
-            // Add OnPointerEnter (hover)
             EventTrigger.Entry entryEnter = new EventTrigger.Entry();
             entryEnter.eventID = EventTriggerType.PointerEnter;
             entryEnter.callback.AddListener((eventData) => OnPointerEnter(buttons[index]));
             trigger.triggers.Add(entryEnter);
 
-            // Add OnPointerExit (hover)
             EventTrigger.Entry entryExit = new EventTrigger.Entry();
             entryExit.eventID = EventTriggerType.PointerExit;
             entryExit.callback.AddListener((eventData) => OnPointerExit(buttons[index]));
@@ -101,17 +99,19 @@ public class MainMenuUI : MonoBehaviour
 
     void Update()
     {
-        
+
     }
 
     public void searchButtonPressed()
     {
         panel.SetActive(false);
         panelSearch.SetActive(true);
+        panelSearch1.SetActive(true);
+        panelSearch2.SetActive(false);
         panelAnalyze.SetActive(false);
         menuCamera.enabled = true;
         cameraOffset.SetActive(false);
-        AnimateButton(0);
+        StartCoroutine(AnimateButtonCoroutine(0));
     }
 
     public void scanButtonPressed()
@@ -121,7 +121,7 @@ public class MainMenuUI : MonoBehaviour
         panelAnalyze.SetActive(false);
         menuCamera.enabled = false;
         cameraOffset.SetActive(true);
-        AnimateButton(1);
+        StartCoroutine(AnimateButtonCoroutine(1));
     }
 
     public void analyzeButtonPressed()
@@ -131,7 +131,7 @@ public class MainMenuUI : MonoBehaviour
         panelAnalyze.SetActive(true);
         menuCamera.enabled = true;
         cameraOffset.SetActive(false);
-        AnimateButton(2);
+        StartCoroutine(AnimateButtonCoroutine(2));
     }
 
     private void OnPointerEnter(Button button)
@@ -148,17 +148,23 @@ public class MainMenuUI : MonoBehaviour
         backgroundImage.color = originalColor;
     }
 
-    private void AnimateButton(int buttonIndex)
+    private IEnumerator AnimateButtonCoroutine(int buttonIndex)
     {
+        // Réinitialiser tous les boutons à blanc
         for (int i = 0; i < buttons.Length; i++)
         {
-            // Reset all button backgrounds to default
             var backgroundImage = buttons[i].GetComponent<Image>();
             backgroundImage.color = Color.white;
         }
 
-        // Change the clicked button background to green
+        // Changer la couleur du bouton cliqué en gris
         var clickedButtonBackground = buttons[buttonIndex].GetComponent<Image>();
-        clickedButtonBackground.color = Color.green;
+        clickedButtonBackground.color = Color.grey;
+
+        // Attendre la durée de l'animation
+        yield return new WaitForSeconds(animationDuration);
+
+        // Remettre le bouton en blanc
+        clickedButtonBackground.color = Color.white;
     }
 }
