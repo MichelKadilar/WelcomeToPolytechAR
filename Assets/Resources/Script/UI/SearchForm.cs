@@ -80,12 +80,20 @@ public class SearchForm : MonoBehaviour
             yearDropdown.value = 0;
             yearDropdown.captionText.text = "Sélectionnez une année";
         }
+        else
+        {
+            LoggingService.Instance.LogInfo($"(RECHERCHE) Année sélectionnée : {years[value]}");
+        }
     }
     
     private void OnSpecializationChanged(int value) {
         if(value == 0) {
             specializationDropdown.value = 0;
             specializationDropdown.captionText.text = "Sélectionnez une spécialité";
+        }
+        else
+        {
+            LoggingService.Instance.LogInfo($"(RECHERCHE) Spécialité sélectionnée : {specializations[value]}");
         }
     }
     
@@ -94,6 +102,10 @@ public class SearchForm : MonoBehaviour
             locationDropdown.value = 0;
             locationDropdown.captionText.text = "Sélectionnez un lieu";
         }
+        else
+        {
+            LoggingService.Instance.LogInfo($"(RECHERCHE) Lieu sélectionné : {locations[value]}");
+        }
     }
     
     private void OnObjectChanged(int value) {
@@ -101,12 +113,20 @@ public class SearchForm : MonoBehaviour
             objectDropdown.value = 0;
             objectDropdown.captionText.text = "Sélectionnez un objet";
         }
+        else
+        {
+            LoggingService.Instance.LogInfo($"(RECHERCHE) Objet sélectionné : {objects[value]}");
+        }
     }
     
     private void OnTransportChanged(int value) {
         if(value == 0) {
             transportDropdown.value = 0;
             transportDropdown.captionText.text = "Sélectionnez un transport";
+        }
+        else
+        {
+            LoggingService.Instance.LogInfo($"(RECHERCHE) Transport sélectionné : {transports[value]}");
         }
     }
 
@@ -121,6 +141,7 @@ public class SearchForm : MonoBehaviour
         objectDropdown.captionText.text = "Sélectionnez un objet";
         transportDropdown.value = 0;
         transportDropdown.captionText.text = "Sélectionnez un transport";
+        LoggingService.Instance.LogInfo("Réinitialisation du formulaire de recherche");
     }
 
     public void SubmitForm() {
