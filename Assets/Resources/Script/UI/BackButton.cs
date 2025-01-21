@@ -2,15 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.XR.CoreUtils;
+using Unity.VisualScripting;
 
 public class BackButton : MonoBehaviour
 {
     public XROrigin xrOrigin;
     public GameObject backButton;
     public GameObject mainMenuPanel;
-    public GameObject panelSearch;
+    public SearchForm panelSearch;
     public GameObject panelSearch1;
     public GameObject panelSearch2;
+    public GameObject panelRoom;
     public GameObject panelAnalyze;
 
     // Start is called before the first frame update
@@ -34,24 +36,49 @@ public class BackButton : MonoBehaviour
     {
         if (xrOrigin != null)
         {
-            Debug.Log("XROrigin trouvé : " + xrOrigin.name);
+            Debug.Log("XROrigin trouvï¿½ : " + xrOrigin.name);
             Component[] components = xrOrigin.GetComponents<Component>();
             foreach (Component component in components)
             {
                 if (component is MonoBehaviour script)
                 {
                     script.enabled = false;
-                    Debug.Log("Script désactivé : " + script.GetType().Name);
+                    Debug.Log("Script dï¿½sactivï¿½ : " + script.GetType().Name);
                 }
                 else
                 {
-                    Debug.Log("Composant non script trouvé : " + component.GetType().Name);
+                    Debug.Log("Composant non script trouvï¿½ : " + component.GetType().Name);
                 }
             }
         }
         else
         {
-            Debug.LogWarning("Aucun XROrigin trouvé dans la scène !");
+            Debug.LogWarning("Aucun XROrigin trouvï¿½ dans la scï¿½ne !");
+        }
+    }
+
+    private void EnableXRComponents()
+    {
+        if (xrOrigin != null)
+        {
+            Debug.Log("XROrigin trouvï¿½ : " + xrOrigin.name);
+            Component[] components = xrOrigin.GetComponents<Component>();
+            foreach (Component component in components)
+            {
+                if (component is MonoBehaviour script)
+                {
+                    script.enabled = true;
+                    Debug.Log("Script activÃ© : " + script.GetType().Name);
+                }
+                else
+                {
+                    Debug.Log("Composant non script trouvï¿½ : " + component.GetType().Name);
+                }
+            }
+        }
+        else
+        {
+            Debug.LogWarning("Aucun XROrigin trouvï¿½ dans la scï¿½ne !");
         }
     }
 
@@ -59,14 +86,6 @@ public class BackButton : MonoBehaviour
     {
         if (IsActive(mainMenuPanel)) {
             backButton.SetActive(false);
-        }
-        else if (IsActive(panelSearch))
-        {
-            backButton.SetActive(true);
-        }
-        else if (IsActive(panelAnalyze))
-        {
-            backButton.SetActive(true);
         }
         else
         {
@@ -76,38 +95,34 @@ public class BackButton : MonoBehaviour
 
     public void goBack()
     {
-        if (IsActive(panelSearch1)){
-            mainMenuPanel.SetActive(true);
-            panelSearch.SetActive(false);
-            panelSearch1.SetActive(false);
-            panelSearch2.SetActive(false);
-            panelAnalyze.SetActive(false);
-            DisableXRComponents();
-        }
-        else if (IsActive(panelSearch2))
+        if (IsActive(panelSearch2))
         {
             mainMenuPanel.SetActive(false);
-            panelSearch.SetActive(true);
+            panelSearch.gameObject.SetActive(true);
             panelSearch1.SetActive(true);
             panelSearch2.SetActive(false);
+            panelRoom.SetActive(false);
             panelAnalyze.SetActive(false);
             DisableXRComponents();
+            panelSearch.ReturnToForm();
         }
-        else if (IsActive(panelAnalyze))
+        else if (IsActive(panelRoom))
         {
-            mainMenuPanel.SetActive(true);
-            panelSearch.SetActive(false);
+            mainMenuPanel.SetActive(false);
+            panelSearch.gameObject.SetActive(false);
             panelSearch1.SetActive(false);
             panelSearch2.SetActive(false);
+            panelRoom.SetActive(false);
             panelAnalyze.SetActive(false);
-            DisableXRComponents();
+            EnableXRComponents();
         }
         else
         {
             mainMenuPanel.SetActive(true);
-            panelSearch.SetActive(false);
+            panelSearch.gameObject.SetActive(false);
             panelSearch1.SetActive(false);
             panelSearch2.SetActive(false);
+            panelRoom.SetActive(false);
             panelAnalyze.SetActive(false);
             DisableXRComponents();
         }

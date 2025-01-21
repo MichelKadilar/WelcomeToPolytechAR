@@ -157,11 +157,11 @@ public class CSVDataReader : MonoBehaviour
         return names;
     }
 
-    public List<Student> GetStudents(string location, int startTime, int endTime) {
+    public List<Student> GetStudents(string location) {
         List<Student> studentsResult = new List<Student>();
         foreach(Student student in students) {
             for(int i = 0; i < 5; i++) {
-                if(startTime <= 13+i && endTime >= 13+i && location == student.locations[i]) {
+                if(location == student.locations[i]) {
                     studentsResult.Add(student);
                     break;
                 }

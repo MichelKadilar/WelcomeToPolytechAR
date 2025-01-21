@@ -33,7 +33,7 @@ public class MainMenuUI : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Pas de menu camera dans la scène");
+            Debug.LogError("Pas de menu camera dans la scï¿½ne");
         }
 
         cameraOffset.SetActive(false);
@@ -50,24 +50,49 @@ public class MainMenuUI : MonoBehaviour
     {
         if (xrOrigin != null)
         {
-            Debug.Log("XROrigin trouvé : " + xrOrigin.name);
+            Debug.Log("XROrigin trouvï¿½ : " + xrOrigin.name);
             Component[] components = xrOrigin.GetComponents<Component>();
             foreach (Component component in components)
             {
                 if (component is MonoBehaviour script)
                 {
                     script.enabled = false;
-                    Debug.Log("Script désactivé : " + script.GetType().Name);
+                    Debug.Log("Script dï¿½sactivï¿½ : " + script.GetType().Name);
                 }
                 else
                 {
-                    Debug.Log("Composant non script trouvé : " + component.GetType().Name);
+                    Debug.Log("Composant non script trouvï¿½ : " + component.GetType().Name);
                 }
             }
         }
         else
         {
-            Debug.LogWarning("Aucun XROrigin trouvé dans la scène !");
+            Debug.LogWarning("Aucun XROrigin trouvï¿½ dans la scï¿½ne !");
+        }
+    }
+
+    private void EnableXRComponents()
+    {
+        if (xrOrigin != null)
+        {
+            Debug.Log("XROrigin trouvï¿½ : " + xrOrigin.name);
+            Component[] components = xrOrigin.GetComponents<Component>();
+            foreach (Component component in components)
+            {
+                if (component is MonoBehaviour script)
+                {
+                    script.enabled = true;
+                    Debug.Log("Script activÃ© : " + script.GetType().Name);
+                }
+                else
+                {
+                    Debug.Log("Composant non script trouvï¿½ : " + component.GetType().Name);
+                }
+            }
+        }
+        else
+        {
+            Debug.LogWarning("Aucun XROrigin trouvï¿½ dans la scï¿½ne !");
         }
     }
 
@@ -133,6 +158,7 @@ public class MainMenuUI : MonoBehaviour
         menuCamera.enabled = false;
         cameraOffset.SetActive(true);
         StartCoroutine(AnimateButtonCoroutine(1));
+        EnableXRComponents();
     }
 
     public void analyzeButtonPressed()

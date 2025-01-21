@@ -171,4 +171,15 @@ public class SearchForm : MonoBehaviour
             tmpText.text = entryText;
         }
     }
+
+    public void ReturnToForm() {
+        Transform firstChild = contentArea.transform.GetChild(0);
+        foreach(Transform child in contentArea.transform) {
+            if (child != firstChild) {
+                Destroy(child.gameObject);
+            }
+        }
+        LayoutRebuilder.ForceRebuildLayoutImmediate(contentArea.GetComponent<RectTransform>());
+        ClearForm();
+    }
 }
