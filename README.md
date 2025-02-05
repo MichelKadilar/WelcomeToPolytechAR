@@ -1,5 +1,8 @@
 # Welcome to Polytech AR
 
+## EQUIPE : Lucie ANDRES, Maxime BOUIS, Louis CALAS, Julian DEZARNAUD, Michel KADILAR
+## Un autre repo et README ont été rendu pour la partie VR.
+
 ## Comment lancer l'application
 
 Build and run sur téléphone Android tel que décrit dans les TDs
