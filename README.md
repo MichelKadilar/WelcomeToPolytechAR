@@ -2,7 +2,7 @@
 
 ## Comment lancer l'application
 
-
+Build and run sur téléphone Android tel que décrit dans les TDs
 
 ## Dépendances utilisées
 
@@ -52,9 +52,5 @@ Ce sont des PNG issus de sites proposant des icônes libres de droit.
 ### CSV
 
 Nous avons également utilisé le CSV fourni afin d'en utiliser les données sur les salles, les étudiants, leur spécialité...
-
-
-
-## Citations
 
 
