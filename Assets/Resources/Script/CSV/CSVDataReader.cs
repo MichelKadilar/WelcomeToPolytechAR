@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,6 +20,7 @@ public class CSVDataReader : MonoBehaviour
     List<string> transports = new List<string>();
     List<string> clothings = new List<string>();
     List<string> specializations = new List<string>();
+    List<int> years = new List<int>();
 
     public void Awake()
     {
@@ -55,7 +57,12 @@ public class CSVDataReader : MonoBehaviour
             if(!clothings.Contains(clothing)) clothings.Add(clothing);
             string specialization = tmp[12];
             if(!specializations.Contains(specialization)) specializations.Add(specialization);
+            int year = int.Parse(tmp[11]);
+            if(!years.Contains(year)) years.Add(year);
         }
+        years.Sort();
+        specializations.Sort();
+        transports.Sort();
     }
 
     private void LoadObjects() {
@@ -90,6 +97,7 @@ public class CSVDataReader : MonoBehaviour
         foreach(Location location in locations) {
             names.Add(location.name);
         }
+        names.Sort();
         return names;
     }
 
@@ -103,6 +111,15 @@ public class CSVDataReader : MonoBehaviour
     public Boolean IsExistingLocation(string locationName)
     {
         return GetLocation(locationName) != null;
+    }
+
+    public List<string> GetYears()
+    {
+        List<string> names = new List<string>();
+        foreach(int year in years) {
+            names.Add(year.ToString());
+        }
+        return names;
     }
 
     public List<string> GetTransports()
@@ -130,17 +147,57 @@ public class CSVDataReader : MonoBehaviour
         return objects;
     }
 
-    public List<Student> GetStudents(string location, int startTime, int endTime) {
-        List<Student> students = new List<Student>();
+    public List<string> GetObjectNames()
+    {
+        List<string> names = new List<string>();
+        foreach(ObjectOfInterest objectOfInterest in objects) {
+            names.Add(objectOfInterest.name);
+        }
+        names.Sort();
+        return names;
+    }
+
+    public List<Student> GetStudents(string location) {
+        List<Student> studentsResult = new List<Student>();
         foreach(Student student in students) {
             for(int i = 0; i < 5; i++) {
-                if(startTime <= 13+i && endTime >= 13+i && location == student.locations[i]) {
-                    students.Add(student);
+                if(location == student.locations[i]) {
+                    studentsResult.Add(student);
                     break;
                 }
             }
         }
-        return students;
+        return studentsResult;
+    }
+
+    public List<Student> GetStudents(int year, string specialization, string location, string objectName, string transport) {
+        bool yearParamSetted = year > 0;
+        bool specializationParamSetted = specialization != null && specialization.Count() > 0;
+        bool locationParamSetted = location != null && location.Count() > 0;
+        bool objectNameParamSetted = objectName != null && objectName.Count() > 0;
+        bool transportParamSetted = transport != null && transport.Count() > 0;
+
+        //if(!(yearParamSetted && specializationParamSetted && locationParamSetted && objectNameParamSetted && transportParamSetted)) return students;
+
+        List<Student> studentsResult = new List<Student>();
+        foreach(Student student in students) {
+            if(yearParamSetted && student.year != year) continue;
+            if(specializationParamSetted && student.specialization != specialization) continue;
+            if(transportParamSetted && student.transport != transport) continue;
+            if(locationParamSetted && !student.locations.Contains(location)) continue;
+            if(objectNameParamSetted) {
+                bool matchObject = false;
+                foreach(ObjectOfInterest objectOfInterest in objects) {
+                    if(objectOfInterest.name == objectName && student.locations.Contains(objectOfInterest.sourceLoc)) {
+                        matchObject = true;
+                        break;
+                    }
+                }
+                if(!matchObject) continue;
+            }
+            studentsResult.Add(student);
+        }
+        return studentsResult;
     }
 
     public List<ObjectOfInterest> GetObjects(string location, int startTime, int endTime) {

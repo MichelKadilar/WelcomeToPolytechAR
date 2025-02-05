@@ -3,38 +3,38 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using Unity.XR.CoreUtils;
+using System.Linq;
 
 public class ARTouch : MonoBehaviour
 {
-    public TMP_Text messageText; 
-    public GameObject canvas; 
-    public TMP_Dropdown dropdown; 
-    public Button calculateButton; 
-    public Button closeButton;  
+    public GameObject panelRoom;
+    public XROrigin xrOrigin;
+
+    public TMP_Text nameLabel;
+    public GameObject studentsContentArea;
+    public GameObject studentsNamePrefab;
+    public TMP_Text objectResultLabel;
+    public TMP_Dropdown locationDropdown; 
+    public TMP_Text resultLabel;
 
 
+    private bool init = false;
     private string currentRoom;
 
     void Start()
     {
-        if (canvas != null)
-        {
-            canvas.SetActive(false);
-        }
-
-        if (calculateButton != null)
-        {
-            calculateButton.onClick.AddListener(CalculateTravelTime);
-        }
-
-        if (closeButton != null)
-        {
-            closeButton.onClick.AddListener(CloseCanvas);
-        }
+        PopulateDropdown();
     }
 
     void Update()
     {
+        if(!init) {
+            locationDropdown.value = 0;
+            locationDropdown.captionText.text = "Sélectionnez un lieu";
+            init = true;
+        }
+
         if (Input.GetMouseButtonDown(0))
         {
             Debug.Log("Pressed primary button.");
@@ -56,49 +56,35 @@ public class ARTouch : MonoBehaviour
 
     void ShowObjectInfo(string objectName)
     {
-        currentRoom = objectName; 
+        currentRoom = objectName;
+        
+        DisableXRComponents();
+        panelRoom.SetActive(true);
+        ClearView();
 
         if (CSVDataReader.Instance != null)
         {
-            string message = $"Salle : {objectName}\n";
+            nameLabel.SetText(objectName);
 
             List<ObjectOfInterest> objects = CSVDataReader.Instance.GetObjects();
             ObjectOfInterest targetObject = objects.Find(obj => obj.sourceLoc == objectName);
 
-            if (targetObject != null)
-            {
-                message += $"Objet lié : {targetObject.name}\n" +
-                           $"Heure de vente : {targetObject.sellTime}\n";
-            }
-            else
-            {
-                message += "Aucun objet lié trouvé.\n";
+            if (targetObject != null) {
+                objectResultLabel.SetText(targetObject.name);
+            } else {
+                objectResultLabel.SetText("Aucun objet trouvé");
             }
 
-            List<Student> students = CSVDataReader.Instance.GetStudents();
-            bool studentFound = false;
-            message += $"\nÉtudiants : ";
-            foreach (Student student in students)
-            {
-                if (IsStudentInRoom(student, objectName))
-                {
-                    studentFound = true;
-                    message += $"{student.name}, ";
+            List<Student> students = CSVDataReader.Instance.GetStudents(objectName);
+            if(students.Count() == 0) {
+                CreateStudentEntry("Aucun étudiant trouvé");
+            } else {
+                foreach(Student student in students) {
+                    CreateStudentEntry(student.name);
                 }
             }
-
-            if (!studentFound)
-            {
-                message += "\nAucun étudiant trouvé dans cette salle.\n";
-            }
-
-            DisplayMessage(message);
-
-            if (canvas != null)
-            {
-                canvas.SetActive(true);
-                PopulateDropdown();
-            }
+            
+            PopulateDropdown();
         }
         else
         {
@@ -106,29 +92,62 @@ public class ARTouch : MonoBehaviour
         }
     }
 
-    void PopulateDropdown()
+    private void DisableXRComponents()
     {
-        if (dropdown != null)
+        if (xrOrigin != null)
         {
-            dropdown.ClearOptions();
-            dropdown.AddOptions(CSVDataReader.Instance.GetLocationNames());
+            Debug.Log("XROrigin trouv� : " + xrOrigin.name);
+            Component[] components = xrOrigin.GetComponents<Component>();
+            foreach (Component component in components)
+            {
+                if (component is MonoBehaviour script)
+                {
+                    script.enabled = false;
+                    Debug.Log("Script d�sactiv� : " + script.GetType().Name);
+                }
+                else
+                {
+                    Debug.Log("Composant non script trouv� : " + component.GetType().Name);
+                }
+            }
+        }
+        else
+        {
+            Debug.LogWarning("Aucun XROrigin trouv� dans la sc�ne !");
         }
     }
 
-    void CalculateTravelTime()
+    void PopulateDropdown()
     {
-        if (dropdown != null && !string.IsNullOrEmpty(currentRoom))
+        if (locationDropdown != null)
         {
-            string destination = dropdown.options[dropdown.value].text;
+            locationDropdown.ClearOptions();
+            List<string> locations = new List<string>(){""};
+            foreach(string value in CSVDataReader.Instance.GetLocationNames()) {
+                locations.Add(value);
+            }
+            locationDropdown.AddOptions(locations);
+            locationDropdown.value = 0;
+            locationDropdown.captionText.text = "Sélectionnez un lieu";
+        }
+    }
+
+    public void CalculateTravelTime()
+    {
+        if (locationDropdown != null && !string.IsNullOrEmpty(currentRoom))
+        {
+            string destination = locationDropdown.options[locationDropdown.value].text;
             int travelTime = GetTravelTime(currentRoom, destination)*2;
 
             if (travelTime >= 0)
             {
-                DisplayMessage($"Temps de trajet entre {currentRoom} et {destination} : {travelTime} minutes.");
+                resultLabel.SetText($"Temps de trajet entre {currentRoom} et {destination} : \n{travelTime} minutes.");
+                LoggingService.Instance.LogInfo($"(Trajet) Calcul du temps de trajet entre {currentRoom} et {destination} : {travelTime} minutes.");
             }
             else
             {
-                DisplayMessage($"Aucun chemin trouvé entre {currentRoom} et {destination}.");
+                resultLabel.SetText($"Aucun chemin trouvé entre {currentRoom} et {destination}.");
+                LoggingService.Instance.LogInfo($"(Trajet) Recherche de trajet. Aucun chemin trouvé.");
             }
         }
     }
@@ -168,36 +187,25 @@ public class ARTouch : MonoBehaviour
         return -1; 
     }
 
-    bool IsStudentInRoom(Student student, string roomName)
+    private void CreateStudentEntry(string entryText)
     {
-        foreach (string location in student.locations)
-        {
-            if (location == roomName)
-            {
-                return true;
+        GameObject newLogObject = Instantiate(studentsNamePrefab, studentsContentArea.transform);
+
+        TMPro.TextMeshProUGUI tmpText = newLogObject.GetComponent<TMPro.TextMeshProUGUI>();
+        if (tmpText != null) {
+            tmpText.text = entryText;
+        }
+    }
+
+    private void ClearView() {
+        Transform firstChild = studentsContentArea.transform.GetChild(0);
+        foreach(Transform child in studentsContentArea.transform) {
+            if (child != firstChild) {
+                Destroy(child.gameObject);
             }
         }
-        return false;
-    }
-
-    void DisplayMessage(string message)
-    {
-        if (messageText != null)
-        {
-            messageText.text = message;
-        }
-        else
-        {
-            Debug.LogWarning("Message Text non attribué dans l'inspecteur.");
-        }
-    }
-
-    void CloseCanvas()
-    {
-        if (canvas != null)
-        {
-            canvas.SetActive(false);
-        }
+        LayoutRebuilder.ForceRebuildLayoutImmediate(studentsContentArea.GetComponent<RectTransform>());
+        resultLabel.SetText("");
     }
 
 }
